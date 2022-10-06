@@ -1,0 +1,33 @@
+<h3>Customer List</h3>
+
+<kendo-grid
+    [data]="customergrid"
+    [pageSize]="gridState.take"
+    [skip]="gridState.skip"
+    [sort]="gridState.sort"
+    [filter]="gridState.filter"
+    [sortable]="true"
+    [pageable]="true"
+    [resizable]="true"
+    [filterable]="true"
+    [height]="450"
+    (dataStateChange)="onStateChange($event)"
+>
+    <kendo-grid-column-group title="My Customers" [columnMenu]="false"> 
+        <kendo-grid-column field="Id" title="ID" [width]="40" filter="numeric"> </kendo-grid-column>
+        <kendo-grid-column field="CustomerName" title="Name" [width]="40"> </kendo-grid-column>
+        <kendo-grid-column field="CustomerAddress" title="Address" [width]="40"> </kendo-grid-column>
+        <kendo-grid-column field="CustomerTypeName" title="CustomerType" [width]="40"> </kendo-grid-column>
+        <kendo-grid-column title="Action" [width]="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoButton [look]="'default'" iconClass="fa fa-remove fa-fw" (click)="delete(dataItem)" *ngxPermissionsOnly="'delete'"></button>
+                &nbsp;
+                <button kendoButton [look]="'default'" iconClass="fa fa-edit fa-fw" (click)="detail(dataItem)" *ngxPermissionsOnly="'edit'"></button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid-column-group>
+</kendo-grid>
+
+<a routerLink="add" *ngxPermissionsOnly="'add'"> 
+    <button kendoButton class="button-size" > Add Customer </button>
+</a>

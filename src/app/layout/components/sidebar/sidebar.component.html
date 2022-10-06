@@ -1,0 +1,39 @@
+<nav class="sidebar bg-white" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
+    <div class="sidebar-header px-3">
+        <div class="navbar-brand m-0 px-3 pt-2 mt-1">
+               <img src="assets/images/logo.png" width="32" alt="Home" class="mr-2">
+               <a class="text-white text-decoration-none" routerLink="/" ><strong>My Training</strong></a>
+        </div>
+    </div>
+ 
+     <div class="scrollbox scroll-y">
+         <div class="scroll-content">
+             <div class="list-group mt-3">
+                 <div class="nested-menu">
+                     <div *ngFor="let row of menu">
+                         <a *ngIf="row.label != ''" class="list-group-item" [ngClass]="{active: showFirst == true && row.label === showMenu}" (click)="addExpandClass(row.label, row.menu_ui_sref)">
+                            <i class="{{row.tree_icon}} mr-2 icon"></i>
+                            <span class="text-truncate d-inline-block">{{ row.label | translate }}</span>
+                            <span *ngIf="row.menu_ui_sref === '#'">
+                               <i class="fa fa-chevron-right text-xs"*ngIf="showMenu == '' ||  showMenu == '0' || row.label != showMenu"></i>
+                               <i class="fa fa-chevron-down text-xs"*ngIf="showFirst == true && row.label === showMenu"></i>
+                            </span>
+                         </a>
+                         <div class="nested" [class.expand]="showMenu === row.label">
+                            <ul class="submenu pl-0">
+                                 <li *ngFor="let child of row.children">
+                                     <a routerLink="/{{child.menu_ui_sref}}" class="list-group-item text-truncate" routerLinkActive="router-link-active"><span>{{ child.label | translate }}</span></a>
+                                 </li>
+                             </ul>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+ 
+    <div (click)="toggleCollapsed()" [ngClass]="{ collapsed: collapsed }" class="toggle-button">
+        <i class="fa fa-fw fa-angle-double-{{ collapsed ? 'right' : 'left' }}"></i>&nbsp;
+        <span>{{ 'Collapse Sidebar' | translate }}</span>
+    </div>
+</nav>

@@ -1,0 +1,66 @@
+<app-page-header [heading]="'Admin List'" [subheading]="'User Management'"></app-page-header>
+<kendo-grid
+    [data]="admingrid"
+    [pageSize]="gridState.take"
+    [skip]="gridState.skip"
+    [sort]="gridState.sort"
+    [filter]="gridState.filter"
+    [sortable]="true"
+    [pageable]="true"
+    [resizable]="true"
+    [filterable]="true"
+    (remove)="removeHandler($event)"
+    (dataStateChange)="onStateChange($event)"
+>
+    <kendo-grid-column-group title="Admin List" [columnMenu]="false"> 
+        <kendo-grid-column field="AdminName" title="Name" [width]="40"> </kendo-grid-column>
+        <kendo-grid-column field="Email" title="Email" [width]="40"> </kendo-grid-column>
+        <kendo-grid-column field="LoginName" title="Login Name" [width]="40"> </kendo-grid-column>
+        <kendo-grid-column field="AdminLevelName" title="Admin Level" [width]="50">
+            <ng-template kendoGridFilterCellTemplate let-filter>
+                <kendo-dropdownlist [(ngModel)] = "selectedItem" (valueChange)="onChange($event)"
+                    [data]="adminLevelComboData" [defaultItem]="{AdminLevelName: 'All', AdminLevelID: null}"
+                    [textField]="'AdminLevelName'" [filterable]="true" [valueField]="'AdminLevelID'" [valuePrimitive]="true"
+                    (filterChange) = "handleFilter($event)">
+                </kendo-dropdownlist>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="Inactive" field="IsBlock" title="Status" [width]="40">
+            <ng-template kendoGridCellTemplate let-status>
+                {{status.IsBlock? "Blocked" : status.Inactive? "Inactive" : "Active"}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column title="Action" [width]="120">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                 <!-- <button kendoButton class="k-button-solid-primary" iconClass="fa fa-edit fa-fw" (click)="detail(dataItem)"> Edit </button> -->
+                 <button kendoButton class="k-button-solid-primary" iconClass="fa fa-edit fa-fw" (click)="editHandler(dataItem)" title="Edit Admin"> Edit </button>
+                 &nbsp;
+                 <button kendoGridRemoveCommand class="k-button-solid-secondary" iconClass="fa fa-trash fa-fw"> Remove </button>
+                 &nbsp;
+                 <a *ngIf="dataItem.Inactive==1">
+					<button kendoButton (click)="ActivateAdmin(dataItem)" class=" k-button-solid-light" [iconClass]="'fa fa-user fa-fw'" title="Click to Activate"> Activate </button>
+				</a>
+				<a *ngIf="!dataItem.Inactive">
+					<button kendoButton (click)="InactivateAdmin(dataItem)" class=" k-button-solid-light" [iconClass]="'fa fa-user-times fa-fw'" title="Click to Inactivate"> Inactivate </button>
+				</a>
+				<a *ngIf="dataItem.IsBlock==1">
+					<button kendoButton (click)="unBlock(dataItem)" class=" k-button-solid-light" [iconClass]="'fa fa-unlock fa-fw'" title="Click to Unblock"> Unblock </button>
+				</a>
+                &nbsp;
+				<button kendoButton (click)="resetPassword(dataItem)" class=" k-button-solid-light" [iconClass]="'fa fa-key fa-fw'" title="Reset Password"> Reset Password </button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid-column-group>
+</kendo-grid>
+
+<a routerLink="add"> 
+    <button kendoButton class="k-button-solid-light px-3 py-2 mt-2" iconClass="fa fa-plus fa-fw"> Add New Admin </button>
+</a>
+
+<kendo-dialog title="Please confirm" *ngIf="adminToRemove" (close)="confirmRemove(false)">
+     <p>Are you sure you want to delete admin {{ adminToRemove.AdminName }}?</p>
+     <kendo-dialog-actions>
+         <button class="k-button" (click)="confirmRemove(false)">No</button>
+         <button class="k-button" (click)="confirmRemove(true)" primary="true">Yes</button>
+     </kendo-dialog-actions>
+ </kendo-dialog>

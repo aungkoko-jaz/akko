@@ -1,0 +1,84 @@
+<h4 class="heading"> Admin Detail </h4>
+<div>
+     <div *ngIf="editAdmin.value"> 
+          <form [formGroup]="editAdmin" (ngSubmit)="saveAdmin()" id="editAdminForm">
+               <div class="d-flex flex-row grid k-gap-x-24">
+                    <div class="w-50">
+                         <label for="admin-name">Admin Name: </label>
+                         <input class="form-control" placeholder="Name" formControlName="AdminName" />
+                         <div class="required-info" *ngIf="editAdmin.get('AdminName').invalid && editAdmin.get('AdminName').errors.maxlength">
+                              Admin Name must be maximum 50 charcters long.
+                         </div>
+                         <div class="required-info" *ngIf="editAdmin.get('AdminName').invalid && editAdmin.get('AdminName').errors.minlength">
+                              Login Name must be minimum 5 charcters long.
+                         </div>
+                    </div>
+
+                    <div class="w-50">
+                         <label for="admin-login-name">Login Name: </label>
+                         <input class="form-control" placeholder="Login Name" formControlName="LoginName" />
+                         <div class="required-info" *ngIf="editAdmin.get('LoginName').invalid && editAdmin.get('LoginName').errors.maxlength">
+                              Login Name must be maximum 25 charcters long.
+                         </div>
+                         <div class="required-info" *ngIf="editAdmin.get('LoginName').invalid && editAdmin.get('LoginName').errors.minlength">
+                         Login Name must be minimum 5 charcters long.
+                         </div>
+                    </div>
+               </div>
+               <br />
+
+
+               <div>
+                    <label for="email"> Email Address :</label>
+                    <input type="email" class="form-control" placeholder="Email address" formControlName="Email" />
+                    <div class="required-info" *ngIf="editAdmin.get('Email').invalid && editAdmin.get('Email').errors.required">
+                         Email address is required.
+                    </div>
+               </div>
+               <br />
+
+               <div>
+                    <label for="admin-level"> Admin Level :</label>
+                    <kendo-dropdownlist
+                         class= "form-control"
+                         formControlName= "AdminLevelID"
+                         [data]= "adminLevels"
+                         [textField]="'AdminLevelName'"
+                         [valueField]="'AdminLevelID'"
+                         [valuePrimitive]="true"
+                    >
+                    </kendo-dropdownlist>
+               </div>
+               <br />
+
+               <label for="admin-photo"> Admin Photo : </label>
+               <div class="col-md-12">
+                    <img *ngIf="previewimage" [src]="previewimage" alt="admin photo" width="100px" height="100px"> &nbsp;
+                    <button kendoButton *ngIf="previewimage" (click)="deleteImageHandler($event)" iconClass="fa fa-remove fa-fw"></button>
+                    <div class="form-group row">
+                         <div class="col-auto">
+                              <kendo-upload class="selector" name="image" formControlName="AdminPhoto"
+                              (success)= "successEventHandler($event)"
+                              (remove) = "removeEventHandler($event)"
+                              (upload)= "uploadEventHandler($event)"
+                              [multiple]="false"
+                              [saveUrl]= "uploadSaveUrl"
+                              [removeUrl] = "uploadRemoveUrl">
+                              </kendo-upload>
+                         </div>
+                    </div>
+               </div>
+          </form>
+
+          <button class="k-button k-button-solid-light px-3 py-1" kendoButton (click)="goBack()"> Back </button> &nbsp;
+          <button class="k-button k-button-solid-light px-3 py-1" iconClass="fa fa-save fa-fw" kendoButton type="submit" form="editAdminForm"> Save </button>
+
+          <kendo-dialog title="Please confirm" *ngIf="photoToRemove" (close)="confirmPhotoRemove(false)">
+               <p style="margin: 30px; font-size: 0.7rem; text-align:center;"> Are you sure to remove delete photo?</p>
+               <kendo-dialog-actions>
+                   <button class="k-button" (click)="confirmPhotoRemove(false)"> No </button>
+                   <button class="k-button" (click)="confirmPhotoRemove(true)" primary="true"> Yes </button>
+               </kendo-dialog-actions>
+           </kendo-dialog>
+     </div>
+</div>

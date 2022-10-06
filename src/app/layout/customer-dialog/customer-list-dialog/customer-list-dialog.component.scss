@@ -1,0 +1,24 @@
+h3 {
+     margin-top: 1rem;
+     margin-bottom: 1rem;
+}
+
+kendo-grid {
+     font-size: 0.7rem;
+}
+
+.k-button {
+     font-size: 0.7rem;
+     padding: 5px 10px;
+   }
+
+   .k-i-loading {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     font-size: 64px;
+     background-color: rgba(255,255,255,.3);
+     color: #ff6757;
+   }

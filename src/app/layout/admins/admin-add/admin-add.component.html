@@ -1,0 +1,91 @@
+<h4 class="heading">New Admin</h4>
+<div>
+     <form [formGroup]="newAdmin" (ngSubmit)="addNewAdmin()" id="addNewAdminForm">
+          <div class="d-flex flex-row grid k-gap-x-24">
+               <div class="w-50">
+                    <label for="admin-name">Admin Name: </label>
+                    <input class="form-control" placeholder="Name" formControlName="AdminName" />
+                    <div class="required-info" *ngIf="newAdmin.get('AdminName').invalid && newAdmin.get('AdminName').errors.maxlength">
+                         Admin Name must be maximum 50 charcters long.
+                    </div>
+                    <div class="required-info" *ngIf="newAdmin.get('AdminName').invalid && newAdmin.get('AdminName').errors.minlength">
+                         Login Name must be minimum 5 charcters long.
+                    </div>
+               </div>
+
+               <div class="w-50">
+                    <label for="admin-login-name">Login Name: </label>
+                    <input class="form-control" placeholder="Login Name" formControlName="LoginName" />
+                    <div class="required-info" *ngIf="newAdmin.get('LoginName').invalid && newAdmin.get('LoginName').errors.maxlength">
+                         Login Name must be maximum 25 charcters long.
+                    </div>
+                    <div class="required-info" *ngIf="newAdmin.get('LoginName').invalid && newAdmin.get('LoginName').errors.minlength">
+                    Login Name must be minimum 5 charcters long.
+                    </div>
+               </div>
+          </div>
+          <br />
+
+
+          <div>
+               <label for="email"> Email Address :</label>
+               <input type="email" class="form-control" placeholder="Email address" formControlName="Email" />
+               <div class="required-info" *ngIf="newAdmin.get('Email').invalid && newAdmin.get('Email').errors.required">
+                    Email address is required.
+               </div>
+          </div>
+          <br />
+
+          <div class="d-flex flex-row k-gap-x-24">
+               <div class="w-50">
+                    <label for="password"> Password : </label>
+                    <input type="password" class="form-control" placeholder="password" formControlName="Password">
+                    <div class="required-info" *ngIf="newAdmin.get('Password').invalid && newAdmin.get('Password').errors.minlength">
+                         Password must be at least 8 character long.
+                    </div>
+               </div>
+               <div class="w-50">
+                    <label for="confirm-password"> Confirm Password :</label>
+                    <input type="password" class="form-control" placeholder="confirm password" formControlName = "ConfirmPassword">
+                    <div class="required-info" *ngIf="newAdmin.get('ConfirmPassword').invalid && newAdmin.get('ConfirmPassword').errors.minlength">
+                         confirm password must be at least 8 character long.
+                    </div>
+               </div>
+          </div>
+          <br />
+
+          <div>
+               <label for="admin-level"> Admin Level :</label>
+               <kendo-dropdownlist
+                    class= "form-control"
+                    formControlName= "AdminLevelID"
+                    [defaultItem]="{AdminLevelID: 1, AdminLevelName: ''}"
+                    [data]= "adminLevels"
+                    [textField]="'AdminLevelName'"
+                    [valueField]="'AdminLevelID'"
+                    [valuePrimitive]="true"
+               >
+               </kendo-dropdownlist>
+          </div>
+          <br />
+
+          <label for="admin-photo"> Admin Photo : </label>
+          <div class="col-md-12">
+               <div class="form-group row">
+                    <div class="col-auto">
+                         <kendo-upload class="selector" name="image" formControlName="AdminPhoto"
+                         (success)= "successEventHandler($event)"
+                         (remove) = "removeEventHandler($event)"
+                         (upload)= "uploadEventHandler($event)"
+                         [multiple]="false"
+                         [saveUrl]= "uploadSaveUrl"
+                         [removeUrl] = "uploadRemoveUrl">
+                         </kendo-upload>
+                    </div>
+               </div>
+          </div>
+     </form>
+
+     <button class="k-button k-button-solid-light px-3 py-1" kendoButton (click)="goBack()"> Back </button> &nbsp;
+     <button class="k-button k-button-solid-light px-3 py-1" kendoButton type="submit" form="addNewAdminForm"> Add Admin </button>
+ </div>

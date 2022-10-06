@@ -1,0 +1,73 @@
+<h3>Customer Inline</h3>
+
+<kendo-grid
+    [data]="customergrid"
+    [pageSize]="gridState.take"
+    [skip]="gridState.skip"
+    [filter]="gridState.filter"
+    [sortable]="true"
+    [pageable]="true"
+    [resizable]="true"
+    [filterable]="true"
+    [height]="410"
+    (edit)="editHandler($event)"
+    (cancel)="cancelHandler($event)"
+    (save)="saveHandler($event)"
+    (remove)="removeHandler($event)"
+    (add)="addHandler($event)"
+    (dataStateChange)="onStateChange($event)"
+>
+    <ng-template kendoGridToolbarTemplate>
+        <button kendoGridAddCommand>Add New Customer</button>
+    </ng-template>
+    <kendo-grid-column field="Id" title="ID" [width]="40" format="{0:n0}">
+        <ng-template kendoGridEditTemplate>
+            {{ customerFormGroup.value.Id }}
+        </ng-template>
+        <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+            <kendo-grid-numeric-filter-cell [column]="column" [filter]="filter"> </kendo-grid-numeric-filter-cell>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CustomerName" title="Name" [width]="80"> </kendo-grid-column>
+    <kendo-grid-column field="RegisterDate" title="Register Date" [width]="80" format="dd/MM/yyyy">
+        <ng-template kendoGridEditTemplate let-formGroup>
+            <kendo-datepicker [formControl]="formGroup.get('RegisterDate')" format="dd/MM/yyyy"> </kendo-datepicker>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.RegisterDate | date: 'dd/MM/yyyy' }}
+        </ng-template>
+        <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+            <kendo-grid-date-filter-cell [column]="column" [filter]="filter"> </kendo-grid-date-filter-cell>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="CustomerAddress" title="Address" [width]="80"> </kendo-grid-column>
+    <kendo-grid-column field="CustomerTypeName" title="CustomerType" [width]="60">
+        <ng-template kendoGridEditTemplate let-formGroup>
+            <kendo-dropdownlist
+                [defaultItem]="{ Id: null, CustomerTypeName: '' }"
+                [data]="customerTypes"
+                textField="CustomerTypeName"
+                valueField="Id"
+                [valuePrimitive]="true"
+                [formControl]="formGroup.get('CustomerTypeId')"
+            >
+            </kendo-dropdownlist>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-command-column title="Action" [width]="220">
+        <ng-template kendoGridCellTemplate let-isNew="isNew">
+            <button kendoGridEditCommand [primary]="true">Edit</button>
+            <button kendoGridRemoveCommand>Remove</button>
+            <button kendoGridSaveCommand [disabled]="customerFormGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
+            <button kendoGridCancelCommand>{{ isNew ? 'Discard Changes' : 'Cancel' }}</button>
+        </ng-template>
+    </kendo-grid-command-column>
+</kendo-grid>
+
+<kendo-dialog title="Please confirm" *ngIf="itemToRemove" (close)="confirmRemove(false)">
+    <p>Are you sure you want to delete customer {{ itemToRemove.CustomerName }}?</p>
+    <kendo-dialog-actions>
+        <button class="k-button" (click)="confirmRemove(false)">No</button>
+        <button class="k-button" (click)="confirmRemove(true)" primary="true">Yes</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

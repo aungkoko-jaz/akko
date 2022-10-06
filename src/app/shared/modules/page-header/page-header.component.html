@@ -1,0 +1,14 @@
+<div class="page-header d-flex flex-column flex-lg-row justify-content-between align-lg-items-center py-2 px-1 mb-3">
+    <h2 class="h4 text-dark font-weight-semibold mb-0 mr-lg-3">
+        {{ heading }}
+    </h2>
+    <ol class="breadcrumb bg-transparent p-0 mb-0 mt-lg-1 mt-2">
+        <li class="breadcrumb-item">
+            <a href="Javascript:void(0)" [routerLink]="['/dashboard']" class="text-primary">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item" *ngIf="subheading != ''">
+            <a href="javascript:history.back()" class="text-primary">{{ subheading }}</a>
+        </li>
+        <li class="breadcrumb-item active" [ngClass]="{ 'd-none': heading == 'Welcome' }">{{ heading }}</li>
+    </ol>
+</div>

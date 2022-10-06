@@ -1,0 +1,65 @@
+<h3>Add New Customer</h3>
+<div>
+    <form [formGroup]="newCustomer" (ngSubmit)="addNewCustomer()">
+        <div>
+            <label for="CustomerName">Customer Name: </label>
+            <input class="form-control" placeholder="Name" formControlName="CustomerName" />
+            <div *ngIf="newCustomer.get('CustomerName').invalid && newCustomer.get('CustomerName').errors.required">
+                Customer Name is required.
+            </div>
+            <div *ngIf="newCustomer.get('CustomerName').invalid && newCustomer.get('CustomerName').errors.maxlength">
+                Customer Name must be maximum 20 charcters long.
+            </div>
+            <div *ngIf="newCustomer.get('CustomerName').invalid && newCustomer.get('CustomerName').errors.minlength">
+                Customer Name must be maximum 5 charcters long.
+            </div>
+        </div>
+        <br />
+
+        <label for="RegisterDate"> Register Date: </label>
+        <kendo-datepicker class="form-control datePicker" formControlName="RegisterDate" format="dd/MM/yyyy"></kendo-datepicker>       
+        <br />
+
+        <div>
+            <label for="CustomerAddress"> Address : </label>
+            <input class="form-control" placeholder="Address" formControlName="CustomerAddress" />
+            <div *ngIf="newCustomer.get('CustomerAddress').invalid && newCustomer.get('CustomerAddress').errors.required">
+                Customer Address is required.
+            </div>
+            <div *ngIf="newCustomer.get('CustomerAddress').invalid && newCustomer.get('CustomerAddress').errors.maxlength">
+                Customer Address must be maximum 50 charcters long.
+            </div>
+            <div *ngIf="newCustomer.get('CustomerAddress').invalid && newCustomer.get('CustomerAddress').errors.minlength">
+                Customer Address must be minimum 5 charcters long.
+            </div>
+        </div>
+        <br />
+
+        <label for="CustomerType"> Customer Type : </label>
+        <select class="form-control" formControlName="CustomerTypeId">
+            <option *ngFor="let custt of customerTypes" value="{{ custt.Id }}">{{ custt.CustomerTypeName }}</option>
+        </select>
+        <br />
+
+        <label for="customer-photo"> Photo : </label>
+        <div class="col-md-12">
+            <div class="form-group row">
+                <div class="col-auto">
+                    <kendo-upload class="selector" name="image" formControlName="CustomerPhoto"
+                    (success)="successEventHandler($event)"
+                    (remove) = "removeEventHandler($event)"
+                    (upload) = "uploadEventHandler($event)"
+                    [multiple]="true"
+                    [concurrent]="false"
+                    [saveUrl]="uploadSaveUrl"
+                    [removeUrl] = "uploadRemoveUrl">
+                    </kendo-upload>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <button class="button-size" kendoButton (click)="goBack()"> Back </button> &nbsp;
+        <button class="button-size" kendoButton type="submit"> Add Customer </button>
+    </form>
+</div>

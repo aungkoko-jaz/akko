@@ -1,0 +1,13 @@
+<div class="modal-header p-0 pb-3">
+    <h4 class="modal-title text-dark font-weight-bold">{{ title }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body p-0 py-4">
+    {{ message }}
+</div>
+<div class="modal-footer border-0 p-0 pt-3">
+    <button  *ngIf="btnCancelText != ''" class="btn btn-secondary px-4" (click)="decline()">{{ btnCancelText }}</button>
+    <button *ngIf="btnOkText != ''" class="btn btn-danger px-4" (click)="accept()" >{{ btnOkText }}</button>
+</div>

@@ -1,0 +1,85 @@
+<kendo-dialog *ngIf="active" [width]="700" [height]="800" (close)="closeForm()">
+    <kendo-dialog-titlebar>
+        {{ isNew ? 'Add new customer' : 'Edit Customer' }}
+    </kendo-dialog-titlebar>
+
+    <form [formGroup]="customerFormGroup" #formDir = "ngForm">
+     <div>
+          <label for="CustomerName">Customer Name: </label>
+          <input class="form-control" placeholder="Name" formControlName="CustomerName" />
+          <div *ngIf="customerFormGroup.get('CustomerName').invalid && customerFormGroup.get('CustomerName').errors.required">
+              Customer Name is required.
+          </div>
+          <div *ngIf="customerFormGroup.get('CustomerName').invalid && customerFormGroup.get('CustomerName').errors.maxlength">
+              Customer Name must be maximum 20 charcters long.
+          </div>
+          <div *ngIf="customerFormGroup.get('CustomerName').invalid && customerFormGroup.get('CustomerName').errors.minlength">
+              Customer Name must be minimum 5 charcters long.
+          </div>
+      </div>
+      <br />
+
+      <label for="RegisterDate"> Register Date: </label>
+      <kendo-datepicker class="form-control" formControlName="RegisterDate" format="dd/MM/yyyy"></kendo-datepicker>
+      <br />
+
+      <div>
+          <label for="CustomerAddress"> Address : </label>
+          <input class="form-control" placeholder="Address" formControlName="CustomerAddress" />
+          <div *ngIf="customerFormGroup.get('CustomerAddress').invalid && customerFormGroup.get('CustomerAddress').errors.required">
+              Customer Address is required.
+          </div>
+          <div *ngIf="customerFormGroup.get('CustomerAddress').invalid && customerFormGroup.get('CustomerAddress').errors.maxlength">
+              Customer Address must be maximum 50 charcters long.
+          </div>
+          <div *ngIf="customerFormGroup.get('CustomerAddress').invalid && customerFormGroup.get('CustomerAddress').errors.minlength">
+              Customer Address must be minimum 5 charcters long.
+          </div>
+      </div>
+      <br />
+
+      <label for="CustomerType"> Customer Type :</label>
+      <kendo-dropdownlist
+          class= "form-control"
+          formControlName= "CustomerTypeId"
+          [data]= "customerTypes"
+          [textField]="'CustomerTypeName'"
+          [valueField]="'Id'"
+          [valuePrimitive]="true"
+      >
+      </kendo-dropdownlist>
+      <br />
+
+      <label for="customer-photo"> Photo : </label>
+      <div class="col-md-12">
+        <img *ngIf="previewimage" [src]="previewimage" alt="customer photo" width="100px" height="100px">
+        <button kendoButton *ngIf="previewimage" (click)="deleteImageHandler($event)" iconClass="fa fa-remove fa-fw"></button>
+        <div class="form-group row">
+            <div class="col-auto">
+                <kendo-upload class="selector" name="image" formControlName="CustomerPhoto"
+                (success)= "successEventHandler($event)"
+                (remove) = "removeEventHandler($event)"
+                (upload)= "uploadEventHandler($event)"
+                [multiple]="false"
+                [saveUrl]= "uploadSaveUrl"
+                [removeUrl] = "uploadRemoveUrl">
+                </kendo-upload>
+            </div>
+        </div>
+      </div>
+
+    </form>
+
+    <kendo-dialog-actions>
+          <button class="k-button" (click)="onCancel($event)"> Cancel </button>
+          <button class="k-button k-primary" [disabled]="!customerFormGroup.valid" (click)="onSave($event)"> Save </button> 
+    </kendo-dialog-actions>
+
+    <kendo-dialog title="Please confirm" *ngIf="photoToRemove" (close)="confirmPhotoRemove(false)">
+        <p style="margin: 30px; text-align:center;"> Are you sure to remove delete photo?</p>
+        <kendo-dialog-actions>
+            <button class="k-button" (click)="confirmPhotoRemove(false)"> No </button>
+            <button class="k-button" (click)="confirmPhotoRemove(true)" primary="true"> Yes </button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+</kendo-dialog>

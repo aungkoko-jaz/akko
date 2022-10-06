@@ -1,0 +1,85 @@
+<app-page-header [heading]="'Customer Report'" [subheading]="'Report'"> </app-page-header>
+<div class="card shadow-sm border-0 px-3 px-lg-4 py-1">
+     <form [formGroup]="reportForm">
+          <div class="k-text-right">
+               <button kendoButton class="btn btn-outline-info btn-sm rounded-pill" type="button" (click)="showSearch(isSearchOpened)" [attr.aria-expanded]="!isSearchOpened" aria-controls="collapseExample">
+                    <i class="fa fa-filter mr-1"> </i> {{showSearchStr}}
+               </button>
+          </div>
+
+          <div id="searchFilter" class="collapse" [ngClass]="{show: isSearchOpened}" *ngIf="isSearchOpened">
+               <div class="row">
+                    <div class="col-md-4">
+                         <div class="form-group">
+                              <label class="col-form-label"> Customer Name :</label>
+                              <input class="form-control" formControlName="CustomerName">
+                         </div>
+                    </div>
+
+                    <div class="col-md-4">
+                         <div class="form-group">
+                              <label class="col-form-label"> Customer Type :</label>
+                              <kendo-dropdownlist
+                                   [defaultItem] = "{Id: null, CustomerTypeName: ''}"
+                                   [data]="customertypes"
+                                   textField = "CustomerTypeName"
+                                   valueField = "Id"
+                                   [valuePrimitive] = "true"
+                                   formControlName="CustomerTypeId" >
+                              </kendo-dropdownlist>
+                         </div>
+                    </div>
+               </div>
+               <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                         <div class="form-group">
+                              <label class="col-form-label"> From Date :</label>
+                              <kendo-datepicker class="form-control" formControlName="FromDate" [format] = "'yyyy-MM-dd'" required>
+                              </kendo-datepicker>
+                         </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                         <div class="form-group">
+                              <label class="col-form-label"> To Date :</label>
+                              <kendo-datepicker class="form-control" formControlName="ToDate" [format] = "'yyyy-MM-dd'" required>
+                              </kendo-datepicker>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <br />
+
+          <div class="search-button">
+               <button class="btn btn-primary px-3 py-1" (click)="Search()"> Search </button> &nbsp;
+               <button class="btn btn-info px-3 py-1" (click)="Clear()"> Search All </button>
+          </div>
+          <br />
+
+          <kendo-grid [data]="reportgrid | async"
+               [pageSize]="gridState.take"
+               [skip]="gridState.skip"
+               [sort]="gridState.sort"
+               [pageable]="{
+                    buttonCount: 5,
+                    info: true,
+                    type: 'input',
+                    pageSizes: true,
+                    previousNext: true
+               }"
+               [filter]="gridState.filter" [sortable]="true" [resizable]="true"
+               [filterable]="{multi: true, search: true}"
+               [columnMenu]="{filter: true, columnChooser: false, sort: false}"
+               [pageable]="true"
+               [scrollable]="true" (dataStateChange)="dataStateChange($event)" class="k-table" >
+               <kendo-grid-column field="Id" title="ID" [filterable]="false" [width]="40"></kendo-grid-column>
+               <kendo-grid-column field="CustomerName" title="Name" [filterable]="false" [width]="150"></kendo-grid-column>
+               <kendo-grid-column field="RegisterDate" title="Register Date" [filterable]="false" [sortable]="true" [width]="100">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                         {{dataItem.RegisterDate | date:'yyyy-MM-dd'}}
+                    </ng-template>
+               </kendo-grid-column>
+               <kendo-grid-column field="CustomerAddress" title="Address" [filterable]="false" [width]="150"></kendo-grid-column>
+               <kendo-grid-column field="CustomerTypeName" title="Customer Type" [filterable]="false" [width]="100"></kendo-grid-column>
+          </kendo-grid>
+     </form>
+</div>

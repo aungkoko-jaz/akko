@@ -1,0 +1,66 @@
+<div class="row">
+	<div class="col-md-5 col-xl-4">
+		<form name="adminLevelForm" [formGroup]="adminLevelForm" novalidate class="mb-3">
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<div class="input-group-text bg-white"><i class="fa fa-search"></i></div>
+				</div>
+				<input class="form-control border-left-0" type="search" placeholder="Search" [(ngModel)]="queryString" [ngModelOptions]="{standalone: true}" tabindex="0" aria-invalid="false">
+			</div>
+			<div class="list-group mt-3">
+				<a *ngFor="let adminLevelSet of adminLevelSets |filteradminlevel: queryString : 'AdminLevelName' ; let i = index " class="list-group-item list-group-item-action" (click)="selectedAdminLevel(adminLevelSet.AdminLevelID)">
+					<span class="font-weight-semibold" ng-class="{'m-l-none': adminLevelSet.selected }">
+						{{ adminLevelSet.AdminLevelName }}
+					</span>
+				</a>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-7 col-xl-8">
+		<div class="card shadow-sm border-0 px-3 px-lg-4 py-4">
+			<form [formGroup]="editForm" name="editForm" novalidate>
+				<div class="text-right">
+					<button type="submit" class="btn btn-outline-info btn-sm rounded-pill"  (click)="newAdminLevel()"><i class="fa fa-plus-circle mr-1"></i> Add New</button>
+				</div>
+				<div class="form-group">
+					<label class="col-form-label">Admin Level Name :
+						<span class="text-danger text-sm">*</span>
+					</label>
+					<input type="text" class="form-control" name="AdminLevelName" formControlName="AdminLevelName" />
+					<span class="text-danger text-xs" [hidden]="editForm.controls.AdminLevelName.valid || editForm.controls.AdminLevelName.pristine">
+						Admin Level is required
+					</span>
+				</div>
+				<div class="form-group">
+					<label class="col-form-label">Restricted IP List : </label>
+					<input type="text" class="form-control" name="IP" formControlName="RestrictIPList" />
+				</div>
+				<div class="form-group">
+					<label class="col-form-label">Description :</label>
+					<input type="text" class="form-control" name="Description" formControlName="Description" autocomplete="off"
+					/>
+				</div>
+				<div class="form-group">
+					<label class="col-form-label">Remark :</label>
+					<textarea name="remark" class="form-control" rows="4" formControlName="Remark"></textarea>
+				</div>
+				<div class="form-group">
+					<label class="col-form-label">Menu Permission :</label>
+					<div class="border rounded-sm pt-2 pl-3" id="mnuTree">
+						<!-- <ngx-treeview [config]="config" [items]="items" (selectedChange)="values = $event" #treeview> -->
+						<ngx-treeview [config]="config" [items]="items" [itemTemplate]="itemTemplate" (selectedChange)="onSelectedChange($event)"
+						 #treeview>
+						</ngx-treeview>
+					</div>
+				</div>
+				<div class="form-group">
+					<button [disabled]="!editForm.valid" type="submit" class="btn btn-success" (click)="saveAdminLevel()">Save</button>
+					<button [disabled]="!editForm.valid" class="btn btn-danger"   (click)="deleteConfirm()">Delete</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Column -->
+</div>
+<div kendoDialogContainer></div>

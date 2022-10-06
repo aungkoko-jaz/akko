@@ -1,0 +1,21 @@
+h3 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+label {
+ padding: .5rem;
+} 
+
+input, select {
+ width: 75%;
+}
+
+kendo-datepicker, kendo-dropdownlist {
+  width: 75%;
+}
+
+.button-size {
+ font-size: 1rem;
+ padding: 10px 20px;
+}

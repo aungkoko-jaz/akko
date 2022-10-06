@@ -1,0 +1,86 @@
+<h3>Customer Details</h3>
+<div *ngIf="customerEdit.value">
+    <h5>{{ customerEdit.value.CustomerName }} Details</h5>
+
+    <form [formGroup]="customerEdit" (ngSubmit)="saveCustomer()">
+        <div>
+            <label for="CustomerName">Customer Name: </label>
+            <input class="form-control" placeholder="Name" formControlName="CustomerName" />
+            <div *ngIf="customerEdit.get('CustomerName').invalid && customerEdit.get('CustomerName').errors.required">
+                Customer Name is required.
+            </div>
+            <div *ngIf="customerEdit.get('CustomerName').invalid && customerEdit.get('CustomerName').errors.maxlength">
+                Customer Name must be maximum 20 charcters long.
+            </div>
+            <div *ngIf="customerEdit.get('CustomerName').invalid && customerEdit.get('CustomerName').errors.minlength">
+                Customer Name must be minimum 5 charcters long.
+            </div>
+        </div>
+        <br />
+
+        <label for="RegisterDate"> Register Date: </label>
+        <kendo-datepicker class="form-control" formControlName="RegisterDate" format="dd/MM/yyyy"></kendo-datepicker>
+        <br />
+
+        <div>
+            <label for="CustomerAddress"> Address : </label>
+            <input class="form-control" placeholder="Address" formControlName="CustomerAddress" />
+            <div *ngIf="customerEdit.get('CustomerAddress').invalid && customerEdit.get('CustomerAddress').errors.required">
+                Customer Address is required.
+            </div>
+            <div *ngIf="customerEdit.get('CustomerAddress').invalid && customerEdit.get('CustomerAddress').errors.maxlength">
+                Customer Address must be maximum 50 charcters long.
+            </div>
+            <div *ngIf="customerEdit.get('CustomerAddress').invalid && customerEdit.get('CustomerAddress').errors.minlength">
+                Customer Address must be minimum 5 charcters long.
+            </div>
+        </div>
+        <br />
+
+        <label for="CustomerType"> Customer Type :</label>
+        <kendo-dropdownlist
+            class="form-control"
+            formControlName="CustomerTypeId"
+            [data]="customerTypes"
+            [textField]="'CustomerTypeName'"
+            [valueField]="'Id'"
+            [valuePrimitive]="true">
+        </kendo-dropdownlist>
+        <br />
+
+        <label for="customer-photo"> Photo : </label>
+        <div class="col-md-12">
+            <div *ngIf="previewimage" class="img-preview">
+                <div *ngFor="let image of previewimage | keyvalue">
+                    <img [src]="image.value.imgURL" [alt]="image.key" width="150px" height="150px" data-max-size="10kb" class="img-fluid rounded" />
+                    <button kendoButton (click)="deleteImageHandler($event, image)" iconClass="fa fa-remove fa-fw"></button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-auto">
+                    <kendo-upload class="selector" name="image" formControlName="CustomerPhoto"
+                    (success)="successEventHandler($event)"
+                    (remove) = "removeEventHandler($event)"
+                    (upload) = "uploadEventHandler($event)"
+                    [multiple]="true"
+                    [concurrent]="false"
+                    [saveUrl]="uploadSaveUrl"
+                    [removeUrl] = "uploadRemoveUrl">
+                    </kendo-upload>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <button class="button-size" kendoButton (click)="goBack()">Back</button> &nbsp;
+        <button class="button-size" kendoButton type="submit">Save</button>
+    </form>
+
+    <kendo-dialog title="Please confirm" *ngIf="photoToRemove" (close)="confirmPhotoRemove(false)">
+        <p style="margin: 30px; text-align:center;"> Are you sure to remove delete photo?</p>
+        <kendo-dialog-actions>
+          <button class="k-button" (click)="confirmPhotoRemove(false)"> No </button>
+          <button class="k-button" (click)="confirmPhotoRemove(true)" primary="true"> Yes </button>
+        </kendo-dialog-actions>
+  </kendo-dialog>
+</div>

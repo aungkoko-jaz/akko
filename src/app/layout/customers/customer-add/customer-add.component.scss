@@ -1,0 +1,21 @@
+  h3 {
+     margin-top: 20px;
+  }
+
+  label {
+    padding: .5rem;
+  } 
+
+   input, select,.datePicker {
+    width: 75%;
+   }
+
+   kendo-upload {
+    width: 120%;
+    font-size: 0.7rem;
+   }
+
+  .button-size {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
